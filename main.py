@@ -3,7 +3,7 @@ import psycopg2
 
 app = Flask(__name__)
 
-conn = psycopg2.connect("dbname='sportsteams' user='user' host='localhost')
+conn = psycopg2.connect("dbname='sportsteams' user='change_to_your_username_for_psql' host='localhost')
 cursor = conn.cursor()
 
 @app.route('/team/add', methods=['POST'])
@@ -47,7 +47,7 @@ def get_all_teams():
     cursor.execute("SELECT id, name, mascot, ciyt, state, championshipsWon FROM nflteams")
     results = cursor.fetchall()
     list_of_teams = []
-    form team in results:
+    for team in results:
       list_of_teams.append( {
         'id' : team[0],
         'name' : team[1],
@@ -60,8 +60,7 @@ def get_all_teams():
     output_dictionary = {
       "teams" : list_of_teams
     }
-    
-    return jsonify(list_of_teams), 200
+    return jsonify(output_dictionary), 200
     
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=5000)
