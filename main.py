@@ -31,20 +31,22 @@ def add_team():
 def get_team_by_name(team_name):
   results = cursor.execute("SELECT id, name, mascot, city, state, championsWon FROM nflteams WHERE LOWER(name) LIKE %s", [f'%{team_name.lower()}%'])
   results = cursor.fetchone()
-                        
-  result_dictionary = {
-    'id' : results[0],
-    'name' : results[1],
-    'mascot' : results[2],
-    'city' : results[3],
-    'state' : results[4],
-    'championshipsWon' : results[5],
-    
-  return jsonify(results), 200
+  if results:                      
+    result_dictionary = {
+      'id' : results[0],
+      'name' : results[1],
+      'mascot' : results[2],
+      'city' : results[3],
+      'state' : results[4],
+      'championshipsWon' : results[5]
+    }  
+    return jsonify(results), 200
+  else:
+    return jsonify("Team Not Found")
 
 @app.route('/teams', methods=['GET'])
 def get_all_teams():
-    cursor.execute("SELECT id, name, mascot, ciyt, state, championshipsWon FROM nflteams")
+    cursor.execute("SELECT id, name, mascot, city, state, championshipsWon FROM nflteams")
     results = cursor.fetchall()
     list_of_teams = []
     for team in results:
@@ -54,7 +56,7 @@ def get_all_teams():
         'mascot' : team[2],
         'city' : team[3],
         'state' : team[4],
-        'championshipsWon' : team[5],
+        'championshipsWon' : team[5]
       } )
     
     output_dictionary = {
